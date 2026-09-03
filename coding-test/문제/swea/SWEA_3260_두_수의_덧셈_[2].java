@@ -4,42 +4,68 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-public class Main_3260 {
+public class Solution {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
 		sc.nextLine();
 		for (int t=1; t<=T; t++) {
-		
-			String A = sc.next();
-			String B = sc.next();
 			
-			int aIdx = A.length() - 1;
-			int bIdx = B.length() - 1;
+			String[] input =sc.nextLine().split(" ");
+			String A;
+			String B;
+			if (input[0].length() >= input[1].length()) {
+				A = input[0];
+				B = input[1];
+			} else {
+				A = input[1];
+				B = input[0];
+			}
 			
-			StringBuilder result = new StringBuilder();
-
+			
+			Stack<Integer> stackA = new Stack<>();
+			Stack<Integer> stackB = new Stack<>();
+			
+			for (int i=0; i<A.length(); i++) {
+				int num = A.charAt(i) - '0';
+				stackA.push(num);
+			}
+			
+			for (int i=0; i<B.length(); i++) {
+				int num = B.charAt(i) - '0';
+				stackB.push(num);
+			}
+			
+			List<Integer> list = new ArrayList<>();
 			int n = 0;
-			
-			while (aIdx >= 0 || bIdx >= 0 || n > 0) {
-				int sum = n;
-				if (aIdx >= 0) {
-					sum += A.charAt(aIdx) - '0';
-					aIdx--;
-				}
+			while (!stackA.isEmpty() && !stackB.isEmpty()) {
+				int a = stackA.pop();
+				int b = stackB.pop();
+				int sum = a + b + n;
 				
-				if (bIdx >= 0) {
-					sum += B.charAt(bIdx) - '0';
-					bIdx--;
-				}
-				
-				result.append(sum % 10);
+				list.add(sum % 10);
 				n = sum / 10;
+				
+			}
+			
+			while (!stackA.isEmpty()) {
+			    int sum = stackA.pop() + n;
+
+			    list.add(sum % 10);
+			    n = sum / 10;
+			}
+			
+			if (n > 0) {
+				list.add(n);
+			}
+			
+			StringBuilder sb = new StringBuilder();
+	
+			for (int i=1; i<=list.size(); i++) {
+				sb.append(list.get(list.size() - i));
 			}
 
-			System.out.println("#" + t + " " + result.reverse());
+			System.out.println("#" + t + " " + sb.toString());
 		}
-		
-		sc.close();
 	}
 }
