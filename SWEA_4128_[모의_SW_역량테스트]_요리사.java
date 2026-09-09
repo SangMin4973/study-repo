@@ -32,11 +32,9 @@ public class Solution {
 		}
 		
 		for (int i=start; i<N; i++){
-			if (selected[i]){
-				continue;
-			}
+			
 			selected[i] = true;
-			combination(i, depth + 1);
+			combination(i + 1, depth + 1);
 			selected[i] = false;
 		}
 	}
@@ -44,22 +42,17 @@ public class Solution {
 	public static void calc(){
 		int sum1 = 0;
 		int sum2 = 0;
-		List<Integer> list1 = new ArrayList<>();
-		List<Integer> list2 = new ArrayList<>();
 		for (int i=0; i<N; i++){
-			if (selected[i]){
-				list1.add(i);
-			} else{
-				list2.add(i);
+			for (int j=i+1; j<N; j++){
+				if (selected[i]&&selected[j]){
+					sum1 += table[i][j] + table[j][i];
+				}
+				else if (!selected[i]&&!selected[j]){
+					sum2 += table[i][j] + table[j][i];
+				}
 			}
 		}
 		
-		for (int i=0; i<N/2; i++){
-			for (int j=0; j<N/2; j++){
-				sum1 += table[list1.get(i)][list1.get(j)];
-				sum2 += table[list2.get(i)][list2.get(j)];
-			}
-		}
 		min = Math.min(min, Math.abs(sum1 - sum2));
 	}
 }
